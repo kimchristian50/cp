@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WDD 330 - Pam Christison - Park Planner - Final Project - Planning page</title>
+    <meta name="description" content="Pam Christison | WDD 330 | Final Project ~ Park Planner ~ Planning page">
+    <meta name="author" content="Pam Christison">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="images/favicon.ico">
+    <link rel="stylesheet" href="styles/small.css">
+    <link rel="stylesheet" href="styles/larger.css">
+    <script src="scripts/dates.js" type="module"></script>
+    <script src="scripts/navigation.js" type="module"></script>
+    <script src="scripts/plan.mjs" type="module"></script>
+</head>
+
+<body>
+    <header>
+        <img src="images/logo.webp" alt="Site Logo" width="160" height="80" fetchpriority="high">
+        <span>Park Planner</span>
+        <nav id="nav-bar" class="navigation">
+            <ul>
+                <!-- <li><a href="index.html">Home</a></li> -->
+                <li><a href="search.html">Search</a></li>
+                <li class="current"><a href="plan.html">Plan</a></li>
+            </ul>
+        </nav>
+        <button id="ham-btn" class="hamburger" aria-label="Main Menu"></button>
+    </header>
+
+    <main>
+        <h1>Plan Your Park Visit</h1>
+        <div class="plan-wrapper">
+            <div class="summary-wrapper">
+                <div id="parkSummary"></div>
+
+            </div>
+        </div>
+        <div class="conditions-wrapper">
+            <h2>Current Conditions</h2>
+        </div>
+        <div class="parks-list">
+            <h3>Your selected parks:</h3>
+            <div id="listHere">
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="whole-footer">
+            <div class="footerdates">
+                <p>&copy; <span id="currentyear"></span> - Pam Christison ~ New Mexico, USA</p>
+                <p><span id="lastModified">Last Modified</span></p>
+            </div>
+            <div class="footer-extras">
+                <p><a href="https://app.screencastify.com/watch/hQJZZdLgai7cNxnY2JQo" target="_blank">Video</a></p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

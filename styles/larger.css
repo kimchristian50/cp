@@ -1,0 +1,78 @@
+@media only screen and (min-width: 64rem) {
+
+    header,
+    main,
+    nav,
+    footer {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /**************** Header ***********************/
+
+    header {
+        grid-template-columns: 160px 1fr 1fr;
+    }
+
+    header span {
+        font-size: 1.75rem;
+    }
+
+    .mode-toggle {
+        display: block;
+    }
+
+    .hamburger {
+        display: none;
+    }
+
+    .navigation {
+        display: block;
+        /* border-bottom: solid 1px var(--accent-color); */
+        position: static;
+        width: auto;
+    }
+
+    .navigation ul {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+        background-color: var(--accent4-color);
+    }
+
+    .navigation a {
+        border: none;
+        color: var(--primary-color);
+        background-color: var(--accent4-color);
+        width: auto;
+        padding: 0.5rem 1rem;
+    }
+
+    .navigation a:hover {
+        border-bottom: 2px solid white;
+    }
+
+    /**************** Main ***********************/
+    .main {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    #showHere {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-gap: 1rem;
+    }
+
+    #mydialog {
+        max-width: 550px;
+    }
+
+    .plan-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+
+}
