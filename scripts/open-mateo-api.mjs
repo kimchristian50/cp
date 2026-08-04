@@ -9,8 +9,7 @@ export async function getParkWeather(latLongString) {
     const coords = parseLatLong(latLongString);
     if (!coords) return null;
 
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,weathercode&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=7`;
-
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,weathercode&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=8`;
     try {
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Weather fetch failed: ${response.status}`);

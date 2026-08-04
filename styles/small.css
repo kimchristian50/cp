@@ -1,6 +1,6 @@
 :root {
     /* palate from https: //coolors.co/palettes/popular/nature - "mossy meadow" */
-    --primary-color: 1e2f23;
+    --primary-color: #1e2f23;
     --accent-color: #607744;
     --accent1-color: #768948;
     --accent2-color: #34623f;
@@ -59,8 +59,7 @@ header span {
     font-family: "Playfair Display", serif;
     font-size: 2rem;
     font-weight: bold;
-    /* background-color: var(--accent3-color); */
-    color: var(--primary-color);
+    color: white;
     padding: 1rem 0;
     margin-left: 1rem;
 }
@@ -114,7 +113,7 @@ header span {
     display: block;
     padding: 1rem;
     width: 100%;
-    color: var(--primary-color);
+    color: white;
     text-decoration: none;
     text-align: center;
     box-sizing: border-box;
@@ -122,8 +121,8 @@ header span {
 }
 
 .navigation a:hover {
-    /* border-bottom: 2px solid var(--accent3-color); */
     background-color: var(--background-color);
+    color: var(--primary-color);
 }
 
 .navigation li.current a {
@@ -136,6 +135,8 @@ main {
     flex-direction: column;
     align-items: center;
     min-height: 80vh;
+    max-width: 1100px;
+    margin: auto;
 }
 
 main div {
@@ -147,8 +148,16 @@ main div li {
     text-align: left;
 }
 
-/************* Index Page **************************/
-/* .hero {
+main h1 {
+    margin-bottom: 2rem;
+}
+
+.searchForm {
+    margin-bottom: 3rem;
+}
+
+/****************** Search **************************/
+.hero {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
@@ -158,51 +167,15 @@ main div li {
     width: 100%;
     height: auto;
     display: block;
-    border: 5px solid var(--accent-color);
 }
 
-.main {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 1rem;
+.hero h1 {
+    background-color: var(--accent2-color);
+    color: white;
+    padding: 1rem;
+    margin-top: 0;
 }
 
-.main img {
-    border: 3px solid var(--accent-color);
-    border-radius: 8px;
-    margin: 0 1rem 1rem 1rem;
-    width: 300px;
-    height: auto;
-}
-
-.main div,
-.main h2,
-.main form,
-.main label {
-    background-color: white;
-}
-
-.main div {
-    border: 1px solid var(--accent3-color);
-    border-radius: 8px;
-    min-height: 100%;
-    align-content: center;
-}
-
-.main a {
-    text-decoration: none;
-}
-
-.card-link {
-    display: block;
-    /* Forces the link to behave like a structural box */
-/* text-decoration: none;
-color: inherit; */
-/* Keeps your text color from turning link-blue 
-}*/
-
-
-/****************** Search **************************/
 #searchForm {
     width: 100%;
     max-width: 650px;
@@ -212,12 +185,28 @@ color: inherit; */
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+}
+
+#searchForm h2 {
+    margin-top: 0px;
+}
+
+#searchForm p {
+    text-align: center;
 }
 
 .searchbars {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 1rem;
+}
+
+.search-result-info p {
+    margin-top: 0;
 }
 
 form select {
@@ -244,36 +233,35 @@ form select {
     width: 100%;
 }
 
-#showHere div {
-    border: 1px solid var(--accent1-color);
-    border-radius: 8px;
-    margin: 0 2rem 0 2rem;
-}
-
 #showHere p {
     font-size: 1rem;
     margin: 0.5rem;
 }
 
-.suggest {
-    justify-self: center;
+.park-list-item {
+    border: 1px solid var(--accent1-color);
+    border-radius: 12px;
+    margin: 0 2rem 0 2rem;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-left: 6px solid var(--accent2-color);
+    transition: 0.2s;
 }
 
-.plan-link a {
-    text-decoration: none;
-    padding: 0.5rem;
-    background-color: var(--accent-color);
-    border: 1px solid var(--accent3-color);
-    border-radius: 10px;
-    color: white;
-    margin-top: 3rem;
+.park-list-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .12);
+    cursor: pointer;
 }
 
 /****************** Planning ***********************/
 .plan-wrapper {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 5px;
+    gap: 1rem;
 }
 
 #listHere {
@@ -334,7 +322,8 @@ form select {
     /* margin: 1rem; */
 }
 
-.alerts h4, .alerts p {
+.alerts h4,
+.alerts p {
     margin-top: 0rem;
 }
 
@@ -346,8 +335,36 @@ form select {
     border: 2px solid var(--accent1-color);
 }
 
-.park-closure, .danger {
+.park-closure,
+.danger {
     border: 2px solid rgb(135, 33, 54);
+}
+
+.forecast {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+}
+
+.forecast-day {
+    border: 1px dashed var(--accent3-color);
+    margin: 0px;
+    justify-items: center;
+}
+
+.weather-icon {
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.forecast-summary {
+    background-color: white;
+    color: var(--primary-color);
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid var(--accent2-color);
+    border-radius: 1rem;
+    justify-items: center;
 }
 
 /******************* Dialog Box *********************/
@@ -379,17 +396,14 @@ form select {
 }
 
 #mydialog .dialog-top {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 0;
-    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 #mydialog .button-container {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: start;
+    align-items: space-between;
+    justify-content: center;
     border: none;
     margin-bottom: 0;
 }
@@ -462,15 +476,47 @@ form select {
     line-height: 1.5;
 }
 
+.dialog-added {
+    padding-top: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
 ::backdrop {
     background-color: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px);
+}
+
+.trip-summary {
+    position: sticky;
+    top: 1rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .12);
+    padding: 1.25rem;
+    border: 1px solid #ddd;
+    width: 280px;
+    align-self: end;
+    margin-top: 1rem;
+}
+
+.plan-button {
+    display: block;
+    text-align: center;
+    padding: 1rem;
+    background: var(--accent2-color);
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.2s;
 }
 
 /****************** Footer **************************/
 .whole-footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-top: 1rem;
 }
 
 footer div {

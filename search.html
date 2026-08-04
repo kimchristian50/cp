@@ -25,18 +25,22 @@
     <header>
         <img src="images/logo.webp" alt="Site Logo" width="160" height="80" fetchpriority="high">
         <span>Park Planner</span>
+
         <nav id="nav-bar" class="navigation">
             <ul>
-                <!-- <li><a href="index.html">Home</a></li> -->
                 <li class="current"><a href="search.html">Search</a></li>
-                <li><a href="plan.html">Plan</a></li>
+                <li><a href="plan.html">My Trip</a></li>
             </ul>
         </nav>
         <button id="ham-btn" class="hamburger" aria-label="Main Menu"></button>
     </header>
 
     <main>
-        <h1>Search by Activity and State</h1>
+        <div class="hero">
+            <img src="images/hero.webp" alt="Mt. Rainier National Park" width="1000" height="500">
+            <h1>Find the best park - and the best time to visit it.</h1>
+        </div>
+        <h2>Find Your Next Adventure</h2>
         <form id="searchForm" role="search">
             <div class="searchbars">
                 <div><select name="activities" id="activities">
@@ -110,27 +114,41 @@
                     </select>
                 </div>
             </div>
-                    <div class="plan-link"><a href="plan.html">Plan your park visit</a></div>
+            <div class="search-info">
+                <p>Choose one or more parks to begin planning.</p>
+            </div>
+            <div class="search-result-info">
+                <p></p>
+            </div>
         </form>
 
         <div id="showHere"></div>
 
-        <!-- One single dialog for all recipes -->
+        <div class="trip-summary">
+            <h3>🏕️ My Trip</h3>
+
+            <div id="tripSummaryList"></div>
+
+            <a class="plan-button" href="plan.html">
+                Plan My Trip →
+            </a>
+        </div>
+
+        <!-- One single dialog for all parks -->
         <dialog id="mydialog">
             <div class="dialog-top">
-                <img alt="park photo placeholder" src="images/logo-with-text.webp" width="300" height="210">
-                <div class="button-container">
-                    <button>Close X</button>
-                    <button id="parkSelect">Select this Park</button>
-                    <h2>Sample Title</h2>
-                </div>
+                <img alt="park photo placeholder" src="images/logo-with-text.webp" width="600" height="420">
+                <h2>Sample Title</h2>
             </div>
             <h3>Address</h3>
             <p class="description">Description</p>
             <p class="directions-info">Directions info</p>
             <a>Url</a>
-            <ul></ul>
-            <ol></ol>
+            <div class="button-container">
+                <button id="parkSelect">Select this Park</button>
+                <button>Close X</button>
+            </div>
+            <p class="dialog-added"></p>
         </dialog>
 
 

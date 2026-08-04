@@ -4,6 +4,9 @@ import { getParkWeather } from './open-mateo-api.mjs'
 // define display locations
 const parkSummary = document.querySelector("#parkSummary");
 const listHere = document.querySelector("#listHere");
+const current = document.querySelector(".current");
+const forecast = document.querySelector(".forecast");
+const forecastSummary = document.querySelector(".forecast-summary");
 
 // build the list of saved parks
 async function buildSavedList() {
@@ -71,10 +74,104 @@ async function buildSummaryData(parkCode) {
     }
     parkSummary.innerHTML += `</div>`;
 
-    // get latLong field and send to weather forecast
+    // get latLong field and send to getParkWeather
     const latLong = park.latLong;
     console.log(latLong);
-    const forecast = getParkWeather(latLong);
+    const weather = await getParkWeather(latLong);
+    if (weather) {
+        forecast.innerHTML = '';
+        buildWeatherDisplay(weather);
+    }
+}
+
+function getWeatherEmoji(code) {
+    if (code === 0) return '☀️';
+    if (code <= 2) return '⛅';
+    if (code <= 3) return '☁️';
+    if (code <= 48) return '🌫️';  // fog
+    if (code <= 57) return '🌧️';  // drizzle
+    if (code <= 67) return '🌧️';  // rain
+    if (code <= 77) return '❄️';  // snow
+    if (code <= 82) return '🌦️';  // showers
+    if (code <= 86) return '🌨️';  // snow showers
+    if (code <= 99) return '⛈️';  // thunderstorm
+    return '🌡️';
+}
+
+// build the conditions summary section
+async function buildWeatherDisplay(weather) {
+
+    const days = weather.daily.time;
+
+    days.forEach((date, i) => {
+        const emoji = getWeatherEmoji(weather.daily.weathercode[i]);
+        const high = Math.round(weather.daily.temperature_2m_max[i]);
+        const low = Math.round(weather.daily.temperature_2m_min[i]);
+        const precip = weather.daily.precipitation_probability_max[i];
+        const wind = Math.round(weather.daily.windspeed_10m_max[i]);
+        // the (/-/g '/') makes sure the date works in different time zones
+        const dayLabel = new Date(date.replace(/-/g, '/')).toLocaleDateString('en-US', {
+            weekday: 'short', month: 'short', day: 'numeric'
+        });
+       
+        forecast.innerHTML += `
+                <div class="forecast-day">
+                <p class="day-label">${dayLabel}</p>
+                <p class="weather-icon">${emoji}</p>
+                <p class="temp-high">High: ${high}°F</p>
+                <p class="temp-low">Low: ${low}°F</p>
+                <p class="precip">💧 ${precip}%</p>
+                <p class="wind">💨 ${wind} mph</p>
+            </div>
+        `;
+    });
+
+    // conditions summary
+    const high = Math.round(weather.daily.temperature_2m_max[0]);
+    const low = Math.round(weather.daily.temperature_2m_min[0]);
+    const precip = weather.daily.precipitation_probability_max[0];
+    const wind = Math.round(weather.daily.windspeed_10m_max[0]);
+    const condition = conditionCheck(high, low, precip, wind);
+    forecastSummary.innerHTML = '';
+    forecastSummary.innerHTML += `
+    <h3 class="${condition}">Current Conditions: ${condition}</h3>`;
+    if (high > 85) {
+        forecastSummary.innerHTML += `
+    <p>High temperature: ${high}</p>`;
+    }
+    if (low < 45) {
+        forecastSummary.innerHTML += `
+    <p>Low temperature: ${low}</p>`;
+    }
+    if (precip > 25) {
+        forecastSummary.innerHTML += `
+    <p>Chance of precipitation: ${precip}</p>`;
+    }
+    if (wind > 15) {
+        forecastSummary.innerHTML += `
+    <p>Wind speed: ${wind}</wind>`;
+    }
+}
+
+// condition check: logic for conditions summary
+// consider adding a volume trigger such as >0.5 inches of total precip accumulation
+// consider adding wind gusts > 40mph
+function conditionCheck(high, low, precip, wind) {
+    if (precip >= 75 ||
+        wind >= 30 ||
+        high >= 95 ||
+        low <= 32) {
+        return "challenging";
+     }
+    else if ((precip < 75 && precip > 25) ||
+        (wind > 15 && wind < 30) ||
+        (high > 85 && high < 95) ||
+        (low > 32 && low < 45)) {
+        return "fair";
+    }
+    else {
+        return "good";
+    }
 }
 
 // click listener for the saved parks list
@@ -100,6 +197,8 @@ listHere.addEventListener('click', (e) => {
     if (!item) return;
     buildSummaryData(item.dataset.parkcode);
 });
+
+
 
 // on page load, build the list and show summary for most recently added park
 async function init() {
