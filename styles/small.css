@@ -109,7 +109,7 @@ header span {
     width: 100%;
 }
 
-.navigation a {
+.navigation ul li a {
     display: block;
     padding: 1rem;
     width: 100%;
@@ -117,7 +117,7 @@ header span {
     text-decoration: none;
     text-align: center;
     box-sizing: border-box;
-    background-color: var(--accent3-color);
+    font-size: 1.2rem;
 }
 
 .navigation a:hover {
@@ -243,8 +243,8 @@ form select {
     border-radius: 12px;
     margin: 0 2rem 0 2rem;
     background-color: white;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
     align-items: center;
     padding: 1rem 1.25rem;
     border-left: 6px solid var(--accent2-color);
@@ -262,6 +262,21 @@ form select {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+}
+
+#parkSummary img {
+    border: 2px solid var(--primary-color);
+    border-radius: 18px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+}
+
+#parkSummary, #park-fees, #park-alerts {
+    background: white;
+    padding: 1rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 18px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    margin: 1rem;
 }
 
 #listHere {
@@ -300,7 +315,6 @@ form select {
     display: flex;
     flex-direction: column;
     margin-top: 1rem;
-    border-top: 10px solid var(--accent2-color);
 }
 
 .alerts {
@@ -329,15 +343,18 @@ form select {
 
 .caution {
     border: 2px solid yellow;
+    background-color: rgb(252, 252, 216);
 }
 
 .information {
     border: 2px solid var(--accent1-color);
+    background-color: rgb(215, 233, 215);
 }
 
 .park-closure,
 .danger {
     border: 2px solid rgb(135, 33, 54);
+    background-color: rgb(246, 224, 228);
 }
 
 .forecast {
@@ -347,9 +364,12 @@ form select {
 }
 
 .forecast-day {
-    border: 1px dashed var(--accent3-color);
+    border: 1px solid var(--accent-color);
     margin: 0px;
     justify-items: center;
+    border-radius: 16px;
+    background: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
 .weather-icon {
@@ -365,6 +385,7 @@ form select {
     border: 1px solid var(--accent2-color);
     border-radius: 1rem;
     justify-items: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
 /******************* Dialog Box *********************/

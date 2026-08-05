@@ -3,6 +3,8 @@ import { getParkWeather } from './open-mateo-api.mjs'
 
 // define display locations
 const parkSummary = document.querySelector("#parkSummary");
+const parkFees = document.querySelector("#park-fees");
+const parkAlertContainer = document.querySelector("#park-alerts");
 const listHere = document.querySelector("#listHere");
 const current = document.querySelector(".current");
 const forecast = document.querySelector(".forecast");
@@ -39,14 +41,14 @@ async function buildSummaryData(parkCode) {
 
     parkSummary.innerHTML = `
         <h2>${park.fullName}</h2>
-        <img src="${imageUrl}" alt="${imageAlt}" width="300" height="210" loading="lazy">
+        <img src="${imageUrl}" alt="${imageAlt}" width="500" height="350" loading="lazy">
         <h3>${address?.line1 ?? ''} ${address?.line2 ?? ''}, ${address?.city ?? ''} ${address?.stateCode ?? ''}</h3>
         <p>${park.description}</p>
         <a href="${park.url}" target="_blank">${park.url}</a>
     `;
 
     if (fee) {
-        parkSummary.innerHTML += `
+        parkFees.innerHTML += `
             <div class="fees">
                 <h3>Entrance fee:</h3>
                 <p>$${fee.cost} - ${fee.description}</p>
@@ -57,13 +59,13 @@ async function buildSummaryData(parkCode) {
     const alertResponse = await getSelectedParkAlerts(parkCode);
     const parkAlerts = alertResponse?.data ?? [];
 
-    parkSummary.innerHTML += `<div class="park-alerts-wrapper"><h3>Park Alerts:</h3>`;
+    parkAlertContainer.innerHTML += `<div class="park-alerts-wrapper"><h3>Park Alerts:</h3>`;
     if (parkAlerts.length === 0) {
-        parkSummary.innerHTML += `<p>No current alerts for this park.</p>`;
+        parkAlertContainer.innerHTML += `<p>No current alerts for this park.</p>`;
     } else {
         parkAlerts.forEach(alert => {
             const categoryId = alert.category.replaceAll(' ', '-').toLowerCase();
-            parkSummary.innerHTML += `
+            parkAlertContainer.innerHTML += `
                 <div class="alerts ${categoryId}">
                     <h4>${alert.category}</h4>
                     <p>${alert.title}: ${alert.description}</p>
@@ -72,7 +74,7 @@ async function buildSummaryData(parkCode) {
             `;
         });
     }
-    parkSummary.innerHTML += `</div>`;
+    // parkSummary.innerHTML += `</div>`;
 
     // get latLong field and send to getParkWeather
     const latLong = park.latLong;
@@ -113,7 +115,7 @@ async function buildWeatherDisplay(weather) {
         const dayLabel = new Date(date.replace(/-/g, '/')).toLocaleDateString('en-US', {
             weekday: 'short', month: 'short', day: 'numeric'
         });
-       
+
         forecast.innerHTML += `
                 <div class="forecast-day">
                 <p class="day-label">${dayLabel}</p>
@@ -132,14 +134,17 @@ async function buildWeatherDisplay(weather) {
     const precip = weather.daily.precipitation_probability_max[0];
     const wind = Math.round(weather.daily.windspeed_10m_max[0]);
     const condition = conditionCheck(high, low, precip, wind);
-    forecastSummary.innerHTML = '';
-    forecastSummary.innerHTML += `
-    <h3 class="${condition}">Current Conditions: ${condition}</h3>`;
+    forecastSummary.innerHTML = `
+    <h3 class="${condition}">Current Conditions: ${condition.toUpperCase()}</h3>`;
     if (high > 85) {
         forecastSummary.innerHTML += `
     <p>High temperature: ${high}</p>`;
     }
-    if (low < 45) {
+    else if (high < 85 && high > 60) {
+        forecastSummary.innerHTML += `
+        <p>Moderate temperatures - good for activity</p>`;
+    }
+        if (low < 45) {
         forecastSummary.innerHTML += `
     <p>Low temperature: ${low}</p>`;
     }
@@ -162,7 +167,7 @@ function conditionCheck(high, low, precip, wind) {
         high >= 95 ||
         low <= 32) {
         return "challenging";
-     }
+    }
     else if ((precip < 75 && precip > 25) ||
         (wind > 15 && wind < 30) ||
         (high > 85 && high < 95) ||
@@ -186,7 +191,7 @@ listHere.addEventListener('click', (e) => {
         // rebuild the summary using the most recently added park code
         if (storedData.length > 0) {
             buildSummaryData(storedData[storedData.length - 1]);
-        } 
+        }
         else {
             parkSummary.innerHTML = '';
         }

@@ -65,7 +65,7 @@ async function buildList() {
         }
     }
 
-    // in buildCard, just render a simple list
+    // render a simple list
     filteredParks.forEach(park => {
         const activityIcon = findActivityIcon(selectedValue);
         parkList.innerHTML += `
@@ -137,7 +137,7 @@ async function showParkDetail(parkCode) {
     const directions = document.querySelector(".directions-info");
     const url = document.querySelector("#mydialog a");
     const parkSelect = document.querySelector("#parkSelect");
-    const myclose = document.querySelector("#mydialog button");
+    const myclose = document.querySelector("#closeDialog");
     const addedMessage = document.querySelector(".dialog-added");
 
     addedMessage.textContent = '';
@@ -146,13 +146,19 @@ async function showParkDetail(parkCode) {
 
     const parkData = await getSelectedParkData(parkCode);
 
+    const image = parkData.data[0].images[0];
+
     mytitle.textContent = parkData.data[0].fullName;
-    myimg.src = parkData.data[0].images[0].url
-    myimg.alt = parkData.data[0].images[0].altText
+    // myimg.src = parkData.data[0].images[0].url
+    // myimg.alt = parkData.data[0].images[0].altText
+    if (image) {
+        myimg.src = image.url;
+        myimg.alt - image.altText;
+    }
     myimg.width = "600"
     myimg.height = "420"
     myimg.loading = "lazy"
-    address.innerHTML = `${parkData.data[0].addresses[0].line1} ${parkData.data[0].addresses[0].line2}, ${parkData.data[0].addresses[0].city} ${parkData.data[0].addresses[0].stateCode}`;
+    address.textContent = `${parkData.data[0].addresses[0].line1} ${parkData.data[0].addresses[0].line2}, ${parkData.data[0].addresses[0].city} ${parkData.data[0].addresses[0].stateCode}`;
     description.textContent = parkData.data[0].description;
     url.textContent = parkData.data[0].url;
     url.href = parkData.data[0].url;
@@ -187,7 +193,7 @@ async function showParkDetail(parkCode) {
 
             parkSelect.textContent = "Added! ✓";
             parkSelect.disabled = true;
-            addedMessage.innerHTML = `${parkData.data[0].fullName} added to My Trip.`;
+            addedMessage.textContent = `${parkData.data[0].fullName} added to My Trip.`;
         };
     }
     mydialog.showModal()

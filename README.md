@@ -1,6 +1,12 @@
 # cp
 A repository for my final project for WDD330
 
+- Change so the park info is stored in localStorage, along with the activitySelect code used to search for it - use in the condition recommendation
+- Make the condition recommendation chattier, maybe with a color?
+- get more formatting suggestions from ai
+
+
+
 // api.js – all fetch calls to NPS and Open - Meteo - seems like I'm not going to do this after all, will prob separate into nps.mjs and weather.mjs
 // nps.js – functions specific to NPS data: fetching parks, filtering by activity / state, fetching alerts
 // weather.js – functions for calling Open - Meteo with coordinates and parsing the response
