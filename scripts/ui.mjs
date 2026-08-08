@@ -1,4 +1,4 @@
-import { getParksData, getSelectedParkData } from './api.mjs'
+import { getParksData, getSelectedParkData, getSelectedParkThingsToDo } from './api.mjs'
 
 const parkList = document.querySelector("#showHere");
 
@@ -116,14 +116,10 @@ async function updateTripSummary() {
             "<p>No parks selected yet.</p>";
         return;
     }
-    for (const parkCode of stored) {
-        const parkData = await getSelectedParkData(parkCode);
-        const park = parkData.data[0];
-
-        tripSummaryList.innerHTML += `
-            <p>🌲${park.fullName}</p>
-        `;
-    }
+    stored.forEach(park => {
+        const activityIcon = findActivityIcon(park.activity);
+        tripSummaryList.innerHTML += `<p>${activityIcon} ${park.fullName}</p>`;
+    });
 }
 
 // dialog modal display when the user clicks on the parks in the list on the search page
@@ -136,6 +132,7 @@ async function showParkDetail(parkCode) {
     const description = document.querySelector(".description");
     const directions = document.querySelector(".directions-info");
     const url = document.querySelector("#mydialog a");
+    const toDo = document.querySelector("#things-to-do");
     const parkSelect = document.querySelector("#parkSelect");
     const myclose = document.querySelector("#closeDialog");
     const addedMessage = document.querySelector(".dialog-added");
@@ -145,25 +142,35 @@ async function showParkDetail(parkCode) {
     if (!mydialog) return; // Safety check if a page skips the modal HTML structure
 
     const parkData = await getSelectedParkData(parkCode);
+    const parkToDo = await getSelectedParkThingsToDo(parkCode);
 
     const image = parkData.data[0].images[0];
 
     mytitle.textContent = parkData.data[0].fullName;
-    // myimg.src = parkData.data[0].images[0].url
-    // myimg.alt = parkData.data[0].images[0].altText
     if (image) {
         myimg.src = image.url;
-        myimg.alt - image.altText;
+        myimg.alt = image.altText;
+        myimg.width = "600"
+        myimg.height = "420"
+        myimg.loading = "lazy"
     }
-    myimg.width = "600"
-    myimg.height = "420"
-    myimg.loading = "lazy"
     address.textContent = `${parkData.data[0].addresses[0].line1} ${parkData.data[0].addresses[0].line2}, ${parkData.data[0].addresses[0].city} ${parkData.data[0].addresses[0].stateCode}`;
     description.textContent = parkData.data[0].description;
     url.textContent = parkData.data[0].url;
     url.href = parkData.data[0].url;
     url.target = "_blank";
     directions.textContent = parkData.data[0].directionsInfo;
+
+    if (parkToDo) { // if there are additional ideas from the /thingstodo endpoint, list them here:
+        toDo.innerHTML = `<h4>Additional ideas for things to do:</h4>`
+
+        parkToDo.forEach(thing => {
+            toDo.innerHTML += `
+        <li>${thing.shortDescription || thing.longDescription} 
+        <a href="${thing.url}" target="_blank">${thing.url}</a>
+        </li>`;
+        });
+    }
 
     myclose.onclick = () => mydialog.close();
 
@@ -172,9 +179,10 @@ async function showParkDetail(parkCode) {
     let selectedList = JSON.parse(storedData);
 
     if (parkSelect) {
-        if (selectedList.includes(parkCode)) {
+        if (selectedList.some(p => p.parkCode === parkCode)) {
             parkSelect.textContent = "Added! ✓";
             parkSelect.disabled = true;
+
         } else {
             parkSelect.textContent = "Select this Park";
             parkSelect.disabled = false;
@@ -185,9 +193,12 @@ async function showParkDetail(parkCode) {
             let currentData = localStorage.getItem("selectedPark-ls") || "[]";
             let currentList = JSON.parse(currentData);
 
-            if (!currentList.includes(parkCode)) {
-                currentList.push(parkCode);
-            }
+            if (!currentList.find(p => p.parkCode === parkCode)) {
+                const park = parkData.data[0];
+                park.activity = dropdownActivity.value;
+                parkSelect.classList.add("added");
+                currentList.push(park);
+            };
             localStorage.setItem("selectedPark-ls", JSON.stringify(currentList));
             updateTripSummary();
 
@@ -199,6 +210,6 @@ async function showParkDetail(parkCode) {
     mydialog.showModal()
 }
 
-
 buildList();
 updateTripSummary();
+window.addEventListener("focus", updateTripSummary);

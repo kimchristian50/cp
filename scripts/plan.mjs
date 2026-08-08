@@ -1,14 +1,16 @@
-import { getSelectedParkData, getSavedParksData, getSelectedParkAlerts } from './api.mjs'
+import { getSavedParksData, getSelectedParkAlerts } from './api.mjs'
 import { getParkWeather } from './open-mateo-api.mjs'
 
 // define display locations
-const parkSummary = document.querySelector("#parkSummary");
+const parkSummary = document.querySelector("#park-summary");
 const parkFees = document.querySelector("#park-fees");
 const parkAlertContainer = document.querySelector("#park-alerts");
 const listHere = document.querySelector("#listHere");
 const current = document.querySelector(".current");
 const forecast = document.querySelector(".forecast");
 const forecastSummary = document.querySelector(".forecast-summary");
+const hero = document.querySelector(".hero");
+// const heroTitle = document.querySelector(".hero ");
 
 // build the list of saved parks
 async function buildSavedList() {
@@ -23,58 +25,63 @@ async function buildSavedList() {
         listHere.innerHTML += `
             <div class="saved-park-item" data-parkcode="${park.parkCode}">
                 <p>${park.fullName} (${park.states})</p>
-                <button class="remove-park" data-parkcode="${park.parkCode}">✕</button>
+                <button class="remove-park" data-parkcode="${park.parkCode}" aria-label="Remove ${park.fullName} from trip">✕</button>
             </div>
         `;
     });
 }
 
-async function buildSummaryData(parkCode) {
-    const parkData = await getSelectedParkData(parkCode);
-    if (!parkData?.data?.[0]) return;
+function getSavedParks() {
+    return JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
+}
 
-    const park = parkData.data[0];
+async function buildSummaryData(parkCode) {
+    const storedData = getSavedParks();
+    const storedPark = storedData.find(p => p.parkCode === parkCode);
+    const activity = storedPark?.activity ?? '';
+
+    const park = storedPark;
     const imageUrl = park.images?.[0]?.url ?? '';
     const imageAlt = park.images?.[0]?.altText ?? park.fullName;
+    const imageUrl2 = park.images?.[1]?.url ?? '';
+    const imageAlt2 = park.images?.[1]?.altText ?? park.fullName;
     const address = park.addresses?.[0];
     const fee = park.entranceFees?.[0];
 
+    hero.innerHTML = `<img src="${imageUrl}" alt="${imageAlt}" width="1000" height="500">`;
+    hero.innerHTML += `<h1>Plan Your Visit: ${park.fullName}</h1>`;
     parkSummary.innerHTML = `
-        <h2>${park.fullName}</h2>
-        <img src="${imageUrl}" alt="${imageAlt}" width="500" height="350" loading="lazy">
+        <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350" loading="lazy">
         <h3>${address?.line1 ?? ''} ${address?.line2 ?? ''}, ${address?.city ?? ''} ${address?.stateCode ?? ''}</h3>
         <p>${park.description}</p>
         <a href="${park.url}" target="_blank">${park.url}</a>
     `;
 
     if (fee) {
-        parkFees.innerHTML += `
-            <div class="fees">
-                <h3>Entrance fee:</h3>
+        parkSummary.innerHTML += `
+                <h2>Entrance fee:</h2>
                 <p>$${fee.cost} - ${fee.description}</p>
-            </div>
         `;
     }
 
     const alertResponse = await getSelectedParkAlerts(parkCode);
     const parkAlerts = alertResponse?.data ?? [];
 
-    parkAlertContainer.innerHTML += `<div class="park-alerts-wrapper"><h3>Park Alerts:</h3>`;
+    parkAlertContainer.innerHTML = `<div class="park-alerts-wrapper"><h3>Park Alerts:</h3>`;
     if (parkAlerts.length === 0) {
-        parkAlertContainer.innerHTML += `<p>No current alerts for this park.</p>`;
+        parkAlertContainer.innerHTML = `<p>No current alerts for this park.</p>`;
     } else {
         parkAlerts.forEach(alert => {
             const categoryId = alert.category.replaceAll(' ', '-').toLowerCase();
             parkAlertContainer.innerHTML += `
-                <div class="alerts ${categoryId}">
-                    <h4>${alert.category}</h4>
+                <details class="alerts ${categoryId}">
+                    <summary>${alert.category}</summary>
                     <p>${alert.title}: ${alert.description}</p>
                     <a href="${alert.url}" target="_blank">${alert.url}</a>
-                </div>
+                </details>
             `;
         });
     }
-    // parkSummary.innerHTML += `</div>`;
 
     // get latLong field and send to getParkWeather
     const latLong = park.latLong;
@@ -82,7 +89,7 @@ async function buildSummaryData(parkCode) {
     const weather = await getParkWeather(latLong);
     if (weather) {
         forecast.innerHTML = '';
-        buildWeatherDisplay(weather);
+        buildWeatherDisplay(weather, parkCode, park.fullName);
     }
 }
 
@@ -101,7 +108,7 @@ function getWeatherEmoji(code) {
 }
 
 // build the conditions summary section
-async function buildWeatherDisplay(weather) {
+async function buildWeatherDisplay(weather, parkCode, parkFullName) {
 
     const days = weather.daily.time;
 
@@ -134,27 +141,42 @@ async function buildWeatherDisplay(weather) {
     const precip = weather.daily.precipitation_probability_max[0];
     const wind = Math.round(weather.daily.windspeed_10m_max[0]);
     const condition = conditionCheck(high, low, precip, wind);
+
+    // find the correct park in the list, then retrieve the activity used to search for it
+    const storedData = getSavedParks();
+    const storedPark = storedData.find(p => p.parkCode === parkCode)
+    const activity = storedPark?.activity ?? '';
     forecastSummary.innerHTML = `
-    <h3 class="${condition}">Current Conditions: ${condition.toUpperCase()}</h3>`;
+    <h3>${parkFullName}</h3>
+    <h3 class="${condition}">Today's ${activity} conditions: ${condition.toUpperCase()}</h3>`;
     if (high > 85) {
         forecastSummary.innerHTML += `
-    <p>High temperature: ${high}</p>`;
-    }
-    else if (high < 85 && high > 60) {
+        <p>High temperature of ${high}</p>`;
+    } else if (high < 85 && high > 60) {
         forecastSummary.innerHTML += `
-        <p>Moderate temperatures - good for activity</p>`;
-    }
-        if (low < 45) {
+        <p>Moderate temperatures between ${low} and ${high}</p>`;
+    } else {
         forecastSummary.innerHTML += `
-    <p>Low temperature: ${low}</p>`;
+        <p>Cooler temperatures between ${low} and ${high}</p>`;
+    }
+    if (low < 45) {
+        forecastSummary.innerHTML += `
+    <p>Cooler temperatures with a low of ${low}</p>`;
     }
     if (precip > 25) {
         forecastSummary.innerHTML += `
-    <p>Chance of precipitation: ${precip}</p>`;
+    <p>Chance of precipitation: ${precip}%</p>`;
+    }
+    if (precip < 15) {
+        forecastSummary.innerHTML += `
+        <p>Chance of precipitation is just ${precip}%</p>`;
     }
     if (wind > 15) {
         forecastSummary.innerHTML += `
-    <p>Wind speed: ${wind}</wind>`;
+    <p>Wind speed could be as high as ${wind} mph</wind></p>`;
+    } else {
+        forecastSummary.innerHTML += `
+        <p>Wind speed should be ${wind} mph or less</p>`;
     }
 }
 
@@ -185,15 +207,18 @@ listHere.addEventListener('click', (e) => {
     if (e.target.classList.contains('remove-park')) {
         const parkCode = e.target.dataset.parkcode;
         let storedData = JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
-        storedData = storedData.filter(code => code !== parkCode);
+        storedData = storedData.filter(park => park.parkCode !== parkCode);
         localStorage.setItem("selectedPark-ls", JSON.stringify(storedData));
         buildSavedList();  // rebuild the list
         // rebuild the summary using the most recently added park code
         if (storedData.length > 0) {
-            buildSummaryData(storedData[storedData.length - 1]);
+            buildSummaryData(storedData[storedData.length - 1].parkCode);
         }
         else {
-            parkSummary.innerHTML = '';
+            parkSummary.innerHTML = "";
+            parkAlertContainer.innerHTML = "";
+            forecast.innerHTML = "";
+            forecastSummary.innerHTML = "";
         }
         return;
     }
@@ -210,7 +235,8 @@ async function init() {
     await buildSavedList();
     const storedData = JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
     if (storedData.length > 0) {
-        buildSummaryData(storedData[storedData.length - 1]);
+        // buildSummaryData(storedData[storedData.length - 1]);
+        buildSummaryData(storedData[storedData.length - 1].parkCode);
     }
 }
 

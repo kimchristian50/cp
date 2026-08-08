@@ -258,25 +258,44 @@ form select {
 }
 
 /****************** Planning ***********************/
+
+#park-summary img {
+    border-radius: 18px;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.4s ease;
+    transform-style: transform 0.3s ease;
+}
+
+#park-summary img:hover {
+    transform: scale(1.05);
+}
+
 .plan-wrapper {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
 }
 
-#parkSummary img {
+#park-summary img {
     border: 2px solid var(--primary-color);
     border-radius: 18px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
 }
 
-#parkSummary, #park-fees, #park-alerts {
+#park-summary,
+#park-fees,
+#park-alerts {
     background: white;
     padding: 1rem;
     border: 1px solid var(--accent-color);
     border-radius: 18px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     margin: 1rem;
+}
+
+#park-summary p,
+#park-summary a {
+    line-height: 1.7;
+    font-family: "Lato", sans-serif;
 }
 
 #listHere {
@@ -287,13 +306,25 @@ form select {
     margin-bottom: 1rem;
 }
 
-#listHere div {
-    border: 1px solid var(--accent1-color);
-    border-radius: 8px;
-    /* margin: 0 2rem 0 2rem; */
+.saved-park-item {
     display: grid;
-    grid-template-columns: auto 2rem;
-    background-color: var(--accent2-color);
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    border: 1px solid var(--accent1-color);
+    background: white;
+    border-left: 6px solid var(--accent2-color);
+    border-radius: 12px;
+    padding: .75rem 1rem;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .08);
+    transition: .2s;
+}
+
+#listHere div p {
+    color: var(--primary-color);
+}
+
+.saved-park-item:hover {
+    transform: translateX(3px);
 }
 
 #listHere p {
@@ -305,8 +336,8 @@ form select {
 
 #listHere button {
     border: none;
-    background-color: var(--accent2-color);
-    color: white;
+    background-color: white;
+    color: var(--primary-color);
     font-weight: bold;
     margin-right: 1rem;
 }
@@ -325,18 +356,19 @@ form select {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    font-family: "Lato", sans-serif;
+    line-height: 1.7;
 }
 
 .alerts p,
-.alerts h4,
+.alerts summary,
 .alerts a {
     align-content: center;
     align-self: center;
     align-items: center;
-    /* margin: 1rem; */
 }
 
-.alerts h4,
+.alerts summary,
 .alerts p {
     margin-top: 0rem;
 }
@@ -346,9 +378,19 @@ form select {
     background-color: rgb(252, 252, 216);
 }
 
+.caution summary::before {
+    content: "⚠️ ";
+    margin-right: 6px;
+}
+
 .information {
     border: 2px solid var(--accent1-color);
     background-color: rgb(215, 233, 215);
+}
+
+.information summary::before {
+    content: "ℹ️ ";
+    margin-right: 6px;
 }
 
 .park-closure,
@@ -357,10 +399,20 @@ form select {
     background-color: rgb(246, 224, 228);
 }
 
+.park-closure summary::before {
+    content: "🚧 ";
+    margin-right: 6px;
+}
+
+.danger summary::before {
+    content: "⛔ ";
+    margin-right: 6px;
+}
+
 .forecast {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    gap: 0;
+    gap: 0.75rem;
 }
 
 .forecast-day {
@@ -370,10 +422,16 @@ form select {
     border-radius: 16px;
     background: white;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    padding: 0.75rem;
+    /* transition: transform 0.2s ease; */
 }
 
+/* .forecast-day:hover { // makes the weather days grow when hovered over...might want to use this
+    transform: scale(1.08);
+} */
+
 .weather-icon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin: 0;
 }
 
@@ -386,7 +444,40 @@ form select {
     border-radius: 1rem;
     justify-items: center;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
 }
+
+.forecast-summary:hover {
+    transform: scale(1.05);
+}
+
+.good::before {
+    content: "🟢 ";
+    margin-right: 6px;
+}
+
+.fair::before {
+    content: "🟡 ";
+    margin-right: 6px;
+}
+
+.challenging::before {
+    content: "🔴 ";
+    margin-right: 6px;
+}
+
+/* @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} */
+
 
 /******************* Dialog Box *********************/
 #mydialog {
@@ -408,7 +499,6 @@ form select {
 #mydialog div {
     display: grid;
     grid-template-columns: 1fr 1fr 44px;
-    /* grid-template-columns: 1fr auto; */
     gap: 1.5rem;
     padding: 1.25rem 1.5rem;
     border-bottom: var(--accent-color) 2px solid;
@@ -467,18 +557,40 @@ form select {
     padding: 10px;
 }
 
+#parkSelect.added {
+    animation: addedPop 1s ease;
+}
+
+@keyframes addedPop {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.12);
+    }
+
+    70% {
+        transform: scale(0.96);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
 #mydialog button:hover {
     background-color: var(--accent-color);
     color: white;
     transform: scale(1.05);
 }
 
-
 #mydialog ul,
 #mydialog ol,
 #mydialog p,
 #mydialog a,
-#mydialog h3 {
+#mydialog h3,
+#mydialog h4 {
     padding-left: 1rem;
     background-color: var(--white);
     margin: 0 1.5rem 1.5rem 1.5rem;
@@ -492,7 +604,6 @@ form select {
 
 #mydialog li {
     background-color: var(--white);
-    /* margin: 0.5rem 1rem 0 1rem; */
     margin-bottom: 0.6rem;
     line-height: 1.5;
 }
@@ -501,7 +612,24 @@ form select {
     padding-top: 1rem;
     font-weight: bold;
     text-align: center;
+    animation: fadeIn 2s ease;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 1;
+        transform: translateY(10px);
+        color: red;
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        color: var(--primary-color);
+    }
+}
+
+
 
 ::backdrop {
     background-color: rgba(0, 0, 0, 0.2);
@@ -533,42 +661,46 @@ form select {
     transition: 0.2s;
 }
 
+#things-to-do {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+#things-to-do a {
+    padding: 0;
+    margin: 0;
+}
+
+
 /****************** Footer **************************/
+
 .whole-footer {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-top: 1rem;
-}
-
-footer div {
-    background-color: var(--accent1-color);
+    margin-top: 2rem;
+    background-color: var(--accent2-color);
     padding: 1rem;
 }
 
-footer div p {
-    background-color: var(--accent1-color);
-    color: var(--primary-color);
-    text-align: left;
+.whole-footer p,
+.whole-footer a,
+.whole-footer span {
+    color: var(--white);
+    background-color: transparent;
 }
 
-.footer-extras p,
-.footer-extras a {
-    text-align: right;
-    align-items: start;
-    color: var(--primary-color);
-    background-color: var(--accent1-color);
+.whole-footer p {
+    margin: 0.5rem 0;
+}
+
+.whole-footer a {
     text-decoration: none;
 }
 
-footer span {
-    background-color: var(--accent1-color);
-    color: var(--primary-color);
+.footer-extras {
+    text-align: right;
 }
 
-
-.footerdates {
-    background-color: var(--accent1-color);
-    color: var(--white);
-    padding: 10px;
-    width: 100%;
+.footer-extras a:hover {
+    text-decoration: underline;
 }

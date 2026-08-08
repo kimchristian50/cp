@@ -17,6 +17,11 @@ export async function getParksData(selectedValue, selectedState) {
         // Fetch the API data
         const activityResponse = await fetch(activityUrl);
 
+        // troubleshooting in the console if calls are failing
+        console.log("Status:", activityResponse.status);
+        console.log("Rate limit:", activityResponse.headers.get("X-RateLimit-Limit"));
+        console.log("Remaining:", activityResponse.headers.get("X-RateLimit-Remaining"));
+
         // Verify network response status
         if (!activityResponse.ok) {
             throw new Error(`HTTP error! status: ${activityResponse.status}`);
@@ -83,24 +88,12 @@ export async function getSelectedParkData(parkCode) {
 export async function getSavedParksData() {
     // get the array of park codes from localStorage
     const storedData = localStorage.getItem("selectedPark-ls") || "[]";
-    const parkCodes = JSON.parse(storedData);
+    const parks = JSON.parse(storedData);
 
     // if nothing saved, return empty
-    if (parkCodes.length === 0) return [];
+    if (parks.length === 0) return [];
 
-    // one API call with all codes at once
-    const parkCodesString = parkCodes.join(',');
-    const url = `https://developer.nps.gov/api/v1/parks?parkCode=${parkCodesString}&fields=images&api_key=hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4`;
-
-    try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await convertToJson(response);
-        return data.data;
-    } catch (error) {
-        console.error("Could not fetch saved parks:", error);
-        return [];
-    }
+    return parks;
 }
 
 export async function getSelectedParkAlerts(parkCode) {
@@ -122,6 +115,28 @@ export async function getSelectedParkAlerts(parkCode) {
         console.log("Park code:", parkCode, parkData);
 
         return parkData;
+
+    } catch (error) {
+        console.error("Could not fetch parks data:", error);
+        return { data: [] };
+    }
+}
+
+export async function getSelectedParkThingsToDo(parkCode) {
+    let parkUrl = `https://developer.nps.gov/api/v1/thingstodo?parkCode=${parkCode}&api_key=hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4`;
+
+    try {
+        // Fetch the API data
+        const parkResponse = await fetch(parkUrl);
+        // Verify network response status
+        if (!parkResponse.ok) {
+            throw new Error(`HTTP error! status: ${parkResponse.status}`);
+        }
+        // Convert JSON
+        const parkToDo = await convertToJson(parkResponse);
+        // Debug log to inspect raw response structure
+        console.log("Park Things to do:", parkCode, parkToDo);
+        return parkToDo.data;
 
     } catch (error) {
         console.error("Could not fetch parks data:", error);
