@@ -51,7 +51,7 @@ async function buildSummaryData(parkCode) {
     hero.innerHTML = `<img src="${imageUrl}" alt="${imageAlt}" width="1000" height="500">`;
     hero.innerHTML += `<h1>Plan Your Visit: ${park.fullName}</h1>`;
     parkSummary.innerHTML = `
-        <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350" loading="lazy">
+        <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350" fetchpriority="high">
         <h3>${address?.line1 ?? ''} ${address?.line2 ?? ''}, ${address?.city ?? ''} ${address?.stateCode ?? ''}</h3>
         <p>${park.description}</p>
         <a href="${park.url}" target="_blank">${park.url}</a>

@@ -161,7 +161,7 @@ async function showParkDetail(parkCode) {
     url.target = "_blank";
     directions.textContent = parkData.data[0].directionsInfo;
 
-    if (parkToDo) { // if there are additional ideas from the /thingstodo endpoint, list them here:
+    if (parkToDo.length > 1) { // if there are additional ideas from the /thingstodo endpoint, list them here:
         toDo.innerHTML = `<h4>Additional ideas for things to do:</h4>`
 
         parkToDo.forEach(thing => {

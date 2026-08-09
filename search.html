@@ -12,7 +12,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
-    <link rel="icon" href="images/favicon.ico">
+    <link rel="icon" href="images/favicon.ico"> <!-- Trekking icon by Icons8 -->
     <link rel="stylesheet" href="styles/small.css">
     <link rel="stylesheet" href="styles/larger.css">
     <script src="scripts/dates.js" type="module"></script>
@@ -43,7 +43,9 @@
         <h2>Find Your Next Adventure</h2>
         <form id="searchForm" role="search">
             <div class="searchbars">
-                <div><select name="activities" id="activities">
+                <div>
+                    <label for="activities">Choose an activity:</label>
+                    <select name="activities" id="activities">
                         <option value="" disabled selected>Select an Activity</option>
                         <option value="Astronomy">Astronomy</option>
                         <option value="Biking">Biking</option>
@@ -58,8 +60,11 @@
                         <option value="Snorkeling">Snorkeling</option>
                         <option value="Swimming">Swimming</option>
                         <option value="Wildlife Watching">Wildlife Watching</option>
-                    </select></div>
-                <div><select id="state" name="state">
+                    </select>
+                </div>
+                <div>
+                    <label for="state">Choose a state:</label>
+                    <select id="state" name="state">
                         <option value="" selected>All States</option>
                         <option value="AL">Alabama</option>
                         <option value="AK">Alaska</option>
