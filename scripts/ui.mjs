@@ -109,7 +109,7 @@ parkList.addEventListener('click', (e) => {
 
 // build the sticky trip summary list to show which parks have been added
 async function updateTripSummary() {
-    const stored = await JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
+    const stored = JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
     tripSummaryList.innerHTML = "";
     if (stored.length === 0) {
         tripSummaryList.innerHTML =

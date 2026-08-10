@@ -261,8 +261,7 @@ form select {
 
 #park-summary img {
     border-radius: 18px;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-radius 0.4s ease;
-    transform-style: transform 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
 #park-summary img:hover {

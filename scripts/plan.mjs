@@ -3,14 +3,11 @@ import { getParkWeather } from './open-mateo-api.mjs'
 
 // define display locations
 const parkSummary = document.querySelector("#park-summary");
-const parkFees = document.querySelector("#park-fees");
 const parkAlertContainer = document.querySelector("#park-alerts");
 const listHere = document.querySelector("#listHere");
-const current = document.querySelector(".current");
 const forecast = document.querySelector(".forecast");
 const forecastSummary = document.querySelector(".forecast-summary");
 const hero = document.querySelector(".hero");
-// const heroTitle = document.querySelector(".hero ");
 
 // build the list of saved parks
 async function buildSavedList() {
@@ -51,7 +48,7 @@ async function buildSummaryData(parkCode) {
     hero.innerHTML = `<img src="${imageUrl}" alt="${imageAlt}" width="1000" height="500">`;
     hero.innerHTML += `<h1>Plan Your Visit: ${park.fullName}</h1>`;
     parkSummary.innerHTML = `
-        <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350" fetchpriority="high">
+        <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350"  loading="lazy">
         <h3>${address?.line1 ?? ''} ${address?.line2 ?? ''}, ${address?.city ?? ''} ${address?.stateCode ?? ''}</h3>
         <p>${park.description}</p>
         <a href="${park.url}" target="_blank">${park.url}</a>
@@ -173,7 +170,7 @@ async function buildWeatherDisplay(weather, parkCode, parkFullName) {
     }
     if (wind > 15) {
         forecastSummary.innerHTML += `
-    <p>Wind speed could be as high as ${wind} mph</wind></p>`;
+    <p>Wind speed could be as high as ${wind} mph></p>`;
     } else {
         forecastSummary.innerHTML += `
         <p>Wind speed should be ${wind} mph or less</p>`;
@@ -235,7 +232,6 @@ async function init() {
     await buildSavedList();
     const storedData = JSON.parse(localStorage.getItem("selectedPark-ls") || "[]");
     if (storedData.length > 0) {
-        // buildSummaryData(storedData[storedData.length - 1]);
         buildSummaryData(storedData[storedData.length - 1].parkCode);
     }
 }

@@ -1,4 +1,5 @@
-// hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4 
+const API_KEY = "hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4";
+const BASE_URL = "https://developer.nps.gov/api/v1";
 
 async function convertToJson(res) {
     const jsonResponse = await res.json();
@@ -10,8 +11,8 @@ async function convertToJson(res) {
 }
 
 export async function getParksData(selectedValue, selectedState) {
-
-    let activityUrl = `https://developer.nps.gov/api/v1/activities/parks/?q=${selectedValue}&api_key=hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4`;
+    let activityUrl = `${BASE_URL}/activities/parks/?q=${selectedValue}&api_key=${API_KEY}`;
+    console.log(activityUrl);
 
     try {
         // Fetch the API data
@@ -44,7 +45,7 @@ export async function getParksData(selectedValue, selectedState) {
         const parkCodes = parks.map(p => p.parkCode).join(',');
 
         // now fetch full details for all of the park codes in one call
-        let parksUrl = `https://developer.nps.gov/api/v1/parks?parkCode=${parkCodes}&limit=100&stateCode=${selectedState}&api_key=hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4`;
+        let parksUrl = `${BASE_URL}/parks/?parkCode=${parkCodes}&limit=100&stateCode=${selectedState}&api_key=${API_KEY}`;
         const parksResponse = await fetch(parksUrl);
         const parksData = await convertToJson(parksResponse);
         console.log("Parks: ", parksData);
@@ -60,7 +61,7 @@ export async function getParksData(selectedValue, selectedState) {
 }
 
 export async function getSelectedParkData(parkCode) {
-    let parkUrl = `https://developer.nps.gov/api/v1/parks/?parkCode=${parkCode}&api_key=hrAcUlvdIURoFZD3jIpeXOcELsNzj2MGGYqXoWL4`;
+    let parkUrl = `${BASE_URL}/parks/?parkCode=${parkCode}&api_key=${API_KEY}`;
 
     try {
         // Fetch the API data
