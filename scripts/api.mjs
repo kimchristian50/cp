@@ -12,7 +12,6 @@ async function convertToJson(res) {
 
 export async function getParksData(selectedValue, selectedState) {
     let activityUrl = `${BASE_URL}/activities/parks/?q=${selectedValue}&api_key=${API_KEY}`;
-    console.log(activityUrl);
 
     try {
         // Fetch the API data

@@ -170,7 +170,7 @@ async function buildWeatherDisplay(weather, parkCode, parkFullName) {
     }
     if (wind > 15) {
         forecastSummary.innerHTML += `
-    <p>Wind speed could be as high as ${wind} mph></p>`;
+    <p>Wind speed could be as high as ${wind} mph</p>`;
     } else {
         forecastSummary.innerHTML += `
         <p>Wind speed should be ${wind} mph or less</p>`;
