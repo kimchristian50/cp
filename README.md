@@ -4,9 +4,9 @@ Park Planner
 Park Planner is an interactive web application designed to help outdoor enthusiasts search for U.S. National Parks by state and activity, view details, check current weather forecasts, and organize saved trips.
 
 Live Demo & Video Presentation
-Live Site: [Link to your hosted site, e.g., GitHub Pages / Netlify]
+Live Site: https://kimchristian50.github.io/cp/search.html
 
-Loom Video Walkthrough: [Link to your 5-minute Loom video]
+Loom Video Walkthrough: https://www.loom.com/share/00a31919c3334d248fa7e309201af220
 
 Features & Technical Highlights
 1. External API Integration
