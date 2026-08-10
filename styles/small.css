@@ -512,7 +512,6 @@ form select {
 
 #mydialog .button-container {
     display: flex;
-    align-items: space-between;
     justify-content: center;
     border: none;
     margin-bottom: 0;
