@@ -45,7 +45,7 @@ async function buildSummaryData(parkCode) {
     const address = park.addresses?.[0];
     const fee = park.entranceFees?.[0];
 
-    hero.innerHTML = `<img src="${imageUrl}" alt="${imageAlt}" width="1000" height="500">`;
+    hero.innerHTML = `<img src="${imageUrl}" alt="${imageAlt}" width="1000" height="500" fetchpriority="high">`;
     hero.innerHTML += `<h1>Plan Your Visit: ${park.fullName}</h1>`;
     parkSummary.innerHTML = `
         <img src="${imageUrl2}" alt="${imageAlt2}" width="500" height="350"  loading="lazy">

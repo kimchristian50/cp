@@ -165,7 +165,8 @@ main h1 {
 
 .hero img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 2 / 1;
+    object-fit: cover;
     display: block;
 }
 
@@ -260,7 +261,13 @@ form select {
 /****************** Planning ***********************/
 
 #park-summary img {
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
     border-radius: 18px;
+box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    border: 2px solid var(--primary-color);
     transition: transform 0.3s ease;
 }
 
