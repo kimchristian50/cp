@@ -266,7 +266,7 @@ form select {
     aspect-ratio: 4 / 3;
     object-fit: cover;
     border-radius: 18px;
-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     border: 2px solid var(--primary-color);
     transition: transform 0.3s ease;
 }
@@ -281,10 +281,15 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     gap: 1rem;
 }
 
-#park-summary img {
-    border: 2px solid var(--primary-color);
-    border-radius: 18px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
+#park-summary {
+    min-height: 120px;
+    /* reserving space for alerts */
+    transition: min-height 0.3s ease;
+}
+
+#park-summary {
+    min-height: 400px;
+    /* Reserves room for image + summary text */
 }
 
 #park-summary,
@@ -419,6 +424,8 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     gap: 0.75rem;
+    min-height: 180px;
+    /* Reserves room for the 7-day grid */
 }
 
 .forecast-day {
@@ -431,10 +438,6 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     padding: 0.75rem;
     /* transition: transform 0.2s ease; */
 }
-
-/* .forecast-day:hover { // makes the weather days grow when hovered over...might want to use this
-    transform: scale(1.08);
-} */
 
 .weather-icon {
     font-size: 3rem;
@@ -471,19 +474,6 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     content: "🔴 ";
     margin-right: 6px;
 }
-
-/* @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-} */
-
 
 /******************* Dialog Box *********************/
 #mydialog {
@@ -634,8 +624,6 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     }
 }
 
-
-
 ::backdrop {
     background-color: rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(5px);
@@ -675,7 +663,6 @@ box-shadow: 0 5px 10px rgba(0, 0, 0, 0.25);
     padding: 0;
     margin: 0;
 }
-
 
 /****************** Footer **************************/
 
